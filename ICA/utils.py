@@ -17,7 +17,6 @@ def get_city():
             city_id = int(city_id)
             if city_id >= 1 and city_id <= 4:
                 return str(city_id)
-                break
         print('Enter a Valid City Nunber\n')
     
 
@@ -60,3 +59,7 @@ def get_date():
     date = f'{year}-{month}-{day}'
     return date
 
+
+def months_label():
+    months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+    return months

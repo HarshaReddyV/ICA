@@ -1,6 +1,6 @@
 from matplotlib import pyplot as plt 
 from phase_1 import average_annual_temperature, average_mean_temp_by_city, average_seven_day_precipitation
-from utils import get_city, get_date, get_connection, get_year
+from utils import get_city, get_date, get_connection, get_year,months_label
 
 connection = get_connection()
 
@@ -20,12 +20,19 @@ def plot_meantemp_allcity_date_range():
 
 def plot_meantemp_allcity_year():
     year = get_year()
-    query = f"SELECT date, mean_temp FROM [daily_weather_entries] WHERE date BETWEEN '{year}-01-01' AND '{year}-12-31' GROUP BY date "
+    months = months_label()
+    mid_query = f"SELECT date, mean_temp FROM [daily_weather_entries] WHERE date BETWEEN '{year}-01-01' AND '{year}-12-31' AND city_id = 1 "
+    lon_query = f"SELECT date, mean_temp FROM [daily_weather_entries] WHERE date BETWEEN '{year}-01-01' AND '{year}-12-31' AND city_id = 2 "
+    par_query = f"SELECT date, mean_temp FROM [daily_weather_entries] WHERE date BETWEEN '{year}-01-01' AND '{year}-12-31' AND city_id = 3 "
+    tou_query = f"SELECT date, mean_temp FROM [daily_weather_entries] WHERE date BETWEEN '{year}-01-01' AND '{year}-12-31' AND city_id = 4 "
     cursor = connection.cursor()
-    result = cursor.execute(query).fetchall()
-    print(result)
+    result = cursor.execute(mid_query).fetchall()
+    date, mean = zip(*result)
+    plt.plot(date,mean)
+    plt.xticks([])
+    plt.legend()
+    plt.show()
     pass
-
 
 
 
