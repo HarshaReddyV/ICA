@@ -5,28 +5,27 @@ def get_connection():
     return connection
 
 def get_city():
-    print(""" 
-            ***Enter City Number***\n
-            1. Middlesborough\n
-            2. London\n
-            3. Paris\n
-            4. Toulouse\n """)
+    conn = get_connection()
+    cursor = conn.cursor()
+    query = "SELECT DISTINCT id,name FROM cities ORDER BY id ASC"
+    results = cursor.execute(query).fetchall()
+    print(results)
+    print('*** AVAILABLE CITIES***')
+    for result in results: 
+        print(f'{result[0]}. {result[1]}')
+
     while True:
         city_id = input('Select City Number:')
         if city_id.isdigit():
             city_id = int(city_id)
-            if city_id >= 1 and city_id <= 4:
-                city_query = f"SELECT name FROM cities WHERE id = {city_id}"
-                connection = get_connection()
-                cursor = connection.cursor()
-                city_result = cursor.execute(city_query).fetchone()
-                city_name = city_result[0]
+            if city_id in [result[0] for result in results]: 
+                city_name = result[1]
                 return (str(city_id),city_name)
         print('Enter a Valid City Nunber\n')
     
 
 def get_year():
-        conn = sqlite3.connect('../db/weather.db') 
+        conn = get_connection()
         cursor = conn.cursor()
         query = "SELECT DISTINCT strftime('%Y', date) FROM daily_weather_entries;"
         cursor.execute(query)
@@ -45,8 +44,7 @@ def get_year():
             print(f'Enter a valid Year\n')
 
 def get_date():
-    year = get_year()
-    
+    year = get_year()  
     while True:
         month = input('Enter Month Number(MM):').strip()
         if month.isdigit():
@@ -65,6 +63,18 @@ def get_date():
     return date
 
 
-def months_label():
-    months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-    return months
+def get_month():
+    i = 1    
+    months = ['January','February','March','April','May','June','July','August','September','October','November','Decemeber']
+    for month in months:
+        print(f'{i}.{month}')
+        i += 1
+
+    while True:
+        selected_month = input('Enter month Number:')
+    
+        if selected_month.isdigit() and  1 <= int(selected_month) <=12:
+            return selected_month, months[int(selected_month) - 1]
+        print('Enter a Valid Month Number..!')
+
+get_city()

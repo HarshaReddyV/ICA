@@ -1,8 +1,9 @@
 from matplotlib import pyplot as plt 
 from phase_1 import average_annual_temperature, average_mean_temp_by_city, average_seven_day_precipitation
-from utils import get_city, get_date, get_connection, get_year,months_label
+from utils import get_city, get_date, get_connection, get_year,months_label, get_month
 
 connection = get_connection()
+cursor = connection.cursor()
 
 def plot_meantemp_allcity_date_range(): 
     date_from = get_date()
@@ -22,7 +23,7 @@ def plot_temp_precep_city_year():
     city = get_city()
     city_id = city[0]
     city_name = city[1]
-    cursor = connection.cursor()  
+      
     query = f"SELECT precipitation, mean_temp FROM daily_weather_entries WHERE city_id = {city_id} AND date BETWEEN '{year}-01-01' AND '{year}-12-31'"
     result = cursor.execute(query).fetchall()  
     presp, mean = zip(*result) 
@@ -34,11 +35,27 @@ def plot_temp_precep_city_year():
     plt.show()
   
 
+def plot_mean_month():
+    year = get_year()
+    result_month = get_month()
+    month_id = result_month[0]
+    month_name = result_month[1]
+
+    query = f"SELECT city_id, mean_temp FROM daily_weather_entries WHERE strftime('%Y', date) = '{year}' AND strftime('%m', date) = '{month_id}' "
+    results = cursor.execute(query).fetchall()
+    print(results)
+    city, mean = zip(*results)
+    plt.plot(city, mean)
+    plt.show()
+
+    
 
 
+    
+    
 
 
-
+plot_mean_month()
 
 
 
