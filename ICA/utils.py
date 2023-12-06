@@ -16,7 +16,12 @@ def get_city():
         if city_id.isdigit():
             city_id = int(city_id)
             if city_id >= 1 and city_id <= 4:
-                return str(city_id)
+                city_query = f"SELECT name FROM cities WHERE id = {city_id}"
+                connection = get_connection()
+                cursor = connection.cursor()
+                city_result = cursor.execute(city_query).fetchone()
+                city_name = city_result[0]
+                return (str(city_id),city_name)
         print('Enter a Valid City Nunber\n')
     
 

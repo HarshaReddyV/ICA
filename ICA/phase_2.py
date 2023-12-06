@@ -9,8 +9,6 @@ def plot_meantemp_allcity_date_range():
     date_to = get_date()
     data = average_mean_temp_by_city(date_from, date_to)
     cities, values = zip(*data)
-    print(cities)
-    print(values)
     plt.bar(cities, values, color='orange')
     plt.xlabel('Cities')
     plt.ylabel(f'Mean Temperature in \u00B0C')
@@ -18,26 +16,29 @@ def plot_meantemp_allcity_date_range():
     plt.show()
 
 
-def plot_meantemp_allcity_year():
+def plot_temp_precep_city_year():
     year = get_year()
     months = months_label()
-    mid_query = f"SELECT date, mean_temp FROM [daily_weather_entries] WHERE date BETWEEN '{year}-01-01' AND '{year}-12-31' AND city_id = 1 "
-    lon_query = f"SELECT date, mean_temp FROM [daily_weather_entries] WHERE date BETWEEN '{year}-01-01' AND '{year}-12-31' AND city_id = 2 "
-    par_query = f"SELECT date, mean_temp FROM [daily_weather_entries] WHERE date BETWEEN '{year}-01-01' AND '{year}-12-31' AND city_id = 3 "
-    tou_query = f"SELECT date, mean_temp FROM [daily_weather_entries] WHERE date BETWEEN '{year}-01-01' AND '{year}-12-31' AND city_id = 4 "
-    cursor = connection.cursor()
-    result = cursor.execute(mid_query).fetchall()
-    date, mean = zip(*result)
-    plt.plot(date,mean)
-    plt.xticks([])
+    city = get_city()
+    city_id = city[0]
+    city_name = city[1]
+    cursor = connection.cursor()  
+    query = f"SELECT precipitation, mean_temp FROM daily_weather_entries WHERE city_id = {city_id} AND date BETWEEN '{year}-01-01' AND '{year}-12-31'"
+    result = cursor.execute(query).fetchall()  
+    presp, mean = zip(*result) 
+    plt.plot(mean, label="Mean")
+    plt.plot(presp, label="Precipitation")
     plt.legend()
+    plt.xticks([])
+    plt.title(f'{city_name} City mean temperature and Precipitation in the year {year}')
     plt.show()
-    pass
+  
 
 
 
 
 
-plot_meantemp_allcity_year()
+
+
 
 
