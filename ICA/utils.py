@@ -13,14 +13,16 @@ def get_city():
     print('*** AVAILABLE CITIES***')
     for result in results: 
         print(f'{result[0]}. {result[1]}')
-
+        
     while True:
         city_id = input('Select City Number:')
         if city_id.isdigit():
             city_id = int(city_id)
-            if city_id in [result[0] for result in results]: 
-                city_name = result[1]
-                return (str(city_id),city_name)
+            for result in results:
+                if city_id == int(result[0]): 
+                    city_name = result[1]
+                    print(city_name)
+                    return (str(city_id),city_name)
         print('Enter a Valid City Nunber\n')
     
 
@@ -32,9 +34,7 @@ def get_year():
         years = [result[0] for result in cursor.fetchall()]
         cursor.close()
         conn.close()
-
-        print(" ***Years Available in the database:", years)
-        
+        print(" ***Years Available in the database:", years)    
         while True:
             year = input('Enter Year(YYYY):')
             if year.isdigit():
@@ -77,4 +77,4 @@ def get_month():
             return selected_month, months[int(selected_month) - 1]
         print('Enter a Valid Month Number..!')
 
-get_city()
+
