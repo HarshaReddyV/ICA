@@ -9,7 +9,6 @@ def get_city():
     cursor = conn.cursor()
     query = "SELECT DISTINCT id,name FROM cities ORDER BY id ASC"
     results = cursor.execute(query).fetchall()
-    print(results)
     print('*** AVAILABLE CITIES***')
     for result in results: 
         print(f'{result[0]}. {result[1]}')

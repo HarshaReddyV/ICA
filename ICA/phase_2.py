@@ -64,6 +64,7 @@ def plot_precp_month_city():
     month_name = result_month[1]
     query = f"SELECT  date, precipitation FROM daily_weather_entries WHERE strftime('%Y', date) = '{year}' AND strftime('%m', date) = '{month_id}' AND city_id = '{city_id}' "
     results = cursor.execute(query).fetchall()
+    print(results)
     if len(results) == 0:
         print('Data is not available, Please try with different date range')
         exit()
@@ -88,7 +89,6 @@ def plot_mean_temp_yearly():
 
 
 
-plot_mean_temp_yearly()
 
     
 

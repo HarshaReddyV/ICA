@@ -55,7 +55,6 @@ def average_annual_temperature( city_id, year):
     result = result[0]
 
     print(f"\nThe Average Annual Temperature in {city} in {year} is {result:.2f}\n")
-    pass
 
 def average_seven_day_precipitation( city_id, start_date):
     cursor = connection.cursor()
