@@ -1,4 +1,17 @@
 import sqlite3
+from geopy.geocoders import Nominatim
+
+def get_coordinates(city_name):
+    geolocator = Nominatim(user_agent="your_app_name")
+    location = geolocator.geocode(city_name)
+
+    if location:
+        latitude, longitude = location.latitude, location.longitude
+        return latitude, longitude
+    else:
+        return None
+
+
 
 def get_connection():
     connection = sqlite3.connect('../db/weather.db')
