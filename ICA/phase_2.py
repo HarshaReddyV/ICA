@@ -45,7 +45,6 @@ def plot_mean_month_city():
     results = cursor.execute(query).fetchall()
     if len(results) == 0:
         print('Data is not available, Please try with different date range')
-        exit()
     else:
         date, result = zip(*results)
         plt.plot(date, result, label="Monthly Mean Temperature by City")

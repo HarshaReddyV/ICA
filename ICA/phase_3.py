@@ -1,12 +1,14 @@
 import sqlite3
+import time
 from phase_1 import select_all_cities, select_all_countries, average_annual_temperature,average_mean_temp_by_city,average_annual_precipitation_by_country,average_seven_day_precipitation
 from utils import get_city,get_date,get_year
 from phase_2 import plot_mean_month_city,plot_mean_temp_yearly,plot_meantemp_allcity_date_range,plot_precp_month_city,plot_temp_precep_city_year
-from phase_4 import add_new_city
+from phase_4 import add_new_city,update_data
 connection = sqlite3.connect('../db/weather.db')
 
-def main():
-    print(""" 
+def main(): 
+    while(True):
+        print(""" 
         ******WELCOME****** \n
         Please Choose the option below to Navigate\n
         1. List All Countries information \n
@@ -23,15 +25,15 @@ def main():
         12. Add new City into database \n
         13. Update Database with latest data (2023) \n
         14. **EXIT** 
-          """)
-    while(True):
+        """)
         choice = input('Enter the option Number: ')
         
         if choice.isdigit():
             choice = int(choice)
             if choice >= 1 and choice <= 13: 
-                execute(choice)    
-                break
+                execute(choice)
+                print('Main Menu will be displayed shortly...')    
+                time.sleep(5)
         
 
 def execute(choice):
@@ -68,7 +70,9 @@ def execute(choice):
         plot_temp_precep_city_year()
     elif choice == 12:
         add_new_city()
-    elif choice == 13: 
+    elif choice == 13:
+        update_data()
+    elif choice == 14: 
         exit()
 
 
