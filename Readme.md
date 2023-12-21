@@ -1,4 +1,4 @@
-#Software for Digital Innovation ICA 
+# Software for Digital Innovation ICA (Teesside University)
 ### Student Name: Harsha Vanga
 ### Student Id: C2285085
 
