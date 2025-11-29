@@ -1,4 +1,4 @@
-# ICA Project -- MSc Computer Science and Artificial Intelligence
+#  MSc Computer Science and Artificial Intelligence ICA
 ## Student name: Harsha Reddy Vanga
 ## Student ID: C2285085
 
