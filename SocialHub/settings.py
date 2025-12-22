@@ -32,6 +32,12 @@ LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "Home"
 LOGOUT_REDIRECT_URL = "Home"
 
+import os
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://socialhub-a5fdbjhpe3dwgecp.ukwest-01.azurewebsites.net",
+]
+
 
 # Application definition
 INSTALLED_APPS = [
