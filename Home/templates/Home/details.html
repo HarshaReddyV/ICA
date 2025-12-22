@@ -1,0 +1,83 @@
+{% extends "Home/base.html" %}
+{% block content %}
+
+<div class="container pb-5">
+
+  <!-- TOPIC -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h3 class="card-title">{{ topic.title }}</h3>
+
+      {% if topic.body %}
+        <p class="text-muted">{{ topic.body }}</p>
+      {% endif %}
+
+      <small class="text-muted">
+        Created {{ topic.created_at|timesince }} ago
+      </small>
+    </div>
+  </div>
+
+  <!-- COMMENTS -->
+  <h5 class="mb-3">Discussion</h5>
+
+  {% if comments %}
+    {% for comment in comments %}
+      <div class="card mb-3">
+        <div class="card-body">
+
+          <!-- Toxicity label -->
+          <div class="mb-2">
+            {% if comment.top_label == "clean" %}
+              <span class="badge text-bg-success">clean</span>
+            {% else %}
+              <span class="badge text-bg-warning">{{ comment.top_label }}</span>
+              {% if comment.is_flagged %}
+                <span class="badge text-bg-danger">flagged</span>
+              {% endif %}
+            {% endif %}
+          </div>
+
+          <p class="mb-1">{{ comment.text }}</p>
+
+          <small class="text-muted">
+            {{ comment.user.username }} · {{ comment.created_at|timesince }} ago
+          </small>
+
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p class="text-muted">No comments yet.</p>
+  {% endif %}
+
+</div>
+
+<!-- CHATGPT-STYLE COMMENT BAR -->
+{% if user.is_authenticated %}
+<form method="post" action="{% url 'post_comment' topic.id %}" class="comment-bar">
+  {% csrf_token %}
+  <div class="container">
+    <div class="input-group comment-box shadow-sm">
+      <textarea
+        name="text"
+        class="form-control border-0"
+        rows="1"
+        placeholder="Write a comment…"
+        required></textarea>
+
+      <button class="btn btn-primary px-4">
+        Send
+      </button>
+    </div>
+  </div>
+</form>
+{% else %}
+<div class="comment-bar text-center">
+  <a href="{% url 'signin' %}" class="btn btn-outline-primary">
+    Sign in to join the discussion
+  </a>
+</div>
+{% endif %}
+
+{% endblock %}

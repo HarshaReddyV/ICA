@@ -1,13 +1,28 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout as auth_logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from .models import Topic, Comment
 
+def postcomment(request, id):
+    return None
 
-def index(request):   # ✅ lowercase (Django convention)
-    return render(request, "Home/index.html")
+def topic(request, id):
+    topic = get_object_or_404(Topic, id=id)
+    comments = Comment.objects.filter(topic=topic).order_by("-created_at")
+
+    return render(request, "Home/details.html", {
+        "topic": topic,
+        "comments": comments
+    })
+
+def index(request):
+    topics = Topic.objects.order_by("-created_at")  # newest first
+    return render(request, "Home/index.html", {
+        "topics": topics
+    })
 
 
 def signup(request):
