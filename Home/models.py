@@ -14,7 +14,8 @@ class Comment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-
+    has_profanity = models.BooleanField(default=False)
+    profanity_severity = models.CharField(max_length=10, default="none")
     # moderation fields
     is_flagged = models.BooleanField(default=False)
     labels = models.JSONField(default=dict, blank=True)    

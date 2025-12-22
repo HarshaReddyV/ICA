@@ -1,4 +1,116 @@
 {% extends "Home/base.html" %}
+{% block styleblock %}
+<style>
+  /* Sticky bottom bar */
+  .comment-bar{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(248, 250, 252, 0.92);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid #e5e7eb;
+    padding: 12px 0;
+    z-index: 1030; /* above content */
+  }
+
+  /* Outer composer container */
+  .comment-composer{
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    padding: 10px 12px;
+  }
+
+  .comment-input-wrap{
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+
+  /* Textarea */
+  .comment-textarea{
+    width: 100%;
+    border: 0;
+    outline: none;
+    resize: none;
+    background: transparent;
+    padding: 10px 12px;
+    border-radius: 14px;
+    line-height: 1.35;
+    max-height: 180px;
+    overflow-y: auto;
+  }
+
+  .comment-textarea::placeholder{
+    color: #94a3b8;
+  }
+
+  /* focus ring */
+  .comment-composer:focus-within{
+    border-color: rgba(13,110,253,.45);
+    box-shadow: 0 0 0 .2rem rgba(13,110,253,.15);
+  }
+
+  /* Send button */
+  .comment-send{
+    border-radius: 14px;
+    padding: 10px 16px;
+    white-space: nowrap;
+  }
+
+  .comment-send:disabled{
+    opacity: .55;
+    cursor: not-allowed;
+  }
+
+  /* Meta row */
+  .comment-meta{
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 8px 2px;
+  }
+</style>
+
+{% endblock %}
+
+{% block scriptblock %}
+<script>
+  (function () {
+    const ta = document.getElementById("commentText");
+    const btn = document.getElementById("sendBtn");
+    const count = document.getElementById("charCount");
+
+    if (!ta || !btn || !count) return;
+
+    const resize = () => {
+      ta.style.height = "auto";
+      ta.style.height = Math.min(ta.scrollHeight, 180) + "px";
+    };
+
+    const update = () => {
+      const val = ta.value.trim();
+      btn.disabled = val.length === 0;
+      count.textContent = ta.value.length;
+      resize();
+    };
+
+    ta.addEventListener("input", update);
+    ta.addEventListener("focus", resize);
+
+    // optional: Ctrl+Enter to send
+    ta.addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter" && !btn.disabled) {
+        btn.click();
+      }
+    });
+
+    update();
+  })();
+</script>
+
+{% endblock %}
 {% block content %}
 
 <div class="container pb-5">
@@ -36,6 +148,10 @@
                 <span class="badge text-bg-danger">flagged</span>
               {% endif %}
             {% endif %}
+
+            {% if comment.has_profanity %}
+                <span class="badge text-bg-dark">profanity</span>
+            {% endif %}
           </div>
 
           <p class="mb-1">{{ comment.text }}</p>
@@ -53,31 +169,49 @@
 
 </div>
 
-<!-- CHATGPT-STYLE COMMENT BAR -->
 {% if user.is_authenticated %}
 <form method="post" action="{% url 'post_comment' topic.id %}" class="comment-bar">
   {% csrf_token %}
-  <div class="container">
-    <div class="input-group comment-box shadow-sm">
-      <textarea
-        name="text"
-        class="form-control border-0"
-        rows="1"
-        placeholder="Write a comment…"
-        required></textarea>
 
-      <button class="btn btn-primary px-4">
-        Send
-      </button>
+  <div class="container">
+    <div class="comment-composer shadow-sm">
+
+      <div class="comment-input-wrap">
+        <textarea
+          id="commentText"
+          name="text"
+          class="comment-textarea"
+          rows="1"
+          maxlength="1000"
+          placeholder="Write a comment…"
+          aria-label="Write a comment"
+          required></textarea>
+
+        <button id="sendBtn" class="btn btn-primary comment-send" type="submit" disabled>
+          <span class="me-1">Send</span>
+          <span aria-hidden="true">➤</span>
+        </button>
+      </div>
+
+      <div class="comment-meta">
+        <small class="text-muted">
+          Be respectful • Your comment will be moderation-labeled
+        </small>
+        <small class="text-muted">
+          <span id="charCount">0</span>/1000
+        </small>
+      </div>
+
     </div>
   </div>
 </form>
 {% else %}
 <div class="comment-bar text-center">
-  <a href="{% url 'signin' %}" class="btn btn-outline-primary">
+  <a href="{% url 'login' %}" class="btn btn-outline-primary">
     Sign in to join the discussion
   </a>
 </div>
 {% endif %}
+
 
 {% endblock %}
