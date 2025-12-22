@@ -8,11 +8,16 @@ from .models import Topic, Comment
 from openai import OpenAI, OpenAIError
 from django.contrib.auth.decorators import login_required
 import json
+import os
 
 
-client = OpenAI()
 
 
+def get_openai_client():
+    api_key =  os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        return None
+    return OpenAI(api_key=api_key)
 
 
 @login_required(login_url="signin")
@@ -22,7 +27,7 @@ def postcomment(request, id):
 
     topic = get_object_or_404(Topic, id=id)
     text = (request.POST.get("text") or "").strip()
-
+   
     if not text:
         messages.error(request, "Comment cannot be empty.")
         return redirect("topic_detail", id=id)
@@ -38,6 +43,8 @@ def postcomment(request, id):
 
     # 1) Moderation API
     try:
+        client = get_openai_client()
+        print(client)
         response = client.moderations.create(
             model="omni-moderation-latest",
             input=text,
