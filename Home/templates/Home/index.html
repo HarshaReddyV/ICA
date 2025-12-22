@@ -1,21 +1,41 @@
 {% extends "Home/base.html" %}
 {% load static %}
 
-
 {% block content %}
 
+{% if not user.is_authenticated %}
+<div class="d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+  <div class="text-center">
 
-<h1> Hello World..!! </h1>
+    
+    <h2 class="mb-3">Welcome to Social Hub</h2>
+    <p class="text-muted mb-4">
+      Sign in or create an account to join discussions and post comments.
+    </p>
+    <p class="text-muted mb-4">
+     Sign in using Username: <b>Test</b> Password: <b> 1234 </b> to get started quickly.
+    </p>
 
-{% if user.is_authenticated %}
-  Welcome {{ user.username }}
-  <form method="post" action="{% url 'logout' %}">
-    {% csrf_token %}
-    <button>Logout</button>
-  </form>
+    <div class="d-flex justify-content-center gap-3">
+      <a href="{% url 'login' %}" class="btn btn-primary btn-lg">
+        Sign in
+      </a>
+      <a href="{% url 'signup' %}" class="btn btn-outline-primary btn-lg">
+        Sign up
+      </a>
+    </div>
+
+  </div>
+</div>
 {% else %}
-  <a href="{% url 'login' %}">Sign in</a>
-  <a href="{% url 'signup' %}">Sign up</a>
+
+<!-- Content for logged-in users -->
+<div class="container">
+  <h3 class="mb-3">Latest Threads</h3>
+  <p class="text-muted">You are logged in as {{ user.username }}.</p>
+  <!-- threads list goes here -->
+</div>
+
 {% endif %}
 
 {% endblock %}
