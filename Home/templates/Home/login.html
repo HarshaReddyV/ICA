@@ -1,11 +1,69 @@
-{% extends "base.html" %}
+{% extends "Home/base.html" %}
 {% block content %}
-<div style="max-width:400px;margin:auto;">
-  <h3>Sign in</h3>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-  </form>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+
+      <div class="card shadow-sm">
+        <div class="card-body">
+
+          <h4 class="card-title mb-4 text-center">Sign in</h4>
+
+            {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-danger">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+
+          <form method="post" action="{% url 'login' %}" novalidate>
+            {% csrf_token %}
+
+            <!-- Username -->
+            <div class="mb-3">
+              <label class="form-label">Username</label>
+              <input
+                type="text"
+                name="username"
+                class="form-control {% if form.username.errors %}is-invalid{% endif %}"
+                value="{{ form.username.value|default:'' }}"
+                placeholder="Enter username"
+                required
+              >
+              {% if form.username.errors %}
+                <div class="invalid-feedback">
+                  {{ form.username.errors|striptags }}
+                </div>
+              {% endif %}
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+              <input
+                type="password"
+                name="password"
+                class="form-control {% if form.password.errors %}is-invalid{% endif %}"
+                placeholder="Enter password"
+                required
+              >
+              {% if form.password.errors %}
+                <div class="invalid-feedback">
+                  {{ form.password.errors|striptags }}
+                </div>
+              {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+              Login
+            </button>
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
 </div>
 {% endblock %}
