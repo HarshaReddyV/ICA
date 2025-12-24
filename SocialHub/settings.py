@@ -4,6 +4,7 @@ import pyodbc
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 load_dotenv()
 
 # Quick-start development settings - unsuitable for production
@@ -86,18 +87,20 @@ WSGI_APPLICATION = 'SocialHub.wsgi.application'
 ### }
 
 
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
         'NAME': 'socialhub',
-        'User': 'Socialhub',
-        'Password': '1234@Hh1',
+        'USER': 'Socialhub',  
+        'PASSWORD': '1234@Hh1',  
         'HOST': 'tcp:socialhub.database.windows.net',
         'PORT': '1433',
         'OPTIONS': {
-            'driver': 'ODBC Driver 18 for SQL Server',
-            'extra_params': 'Encrypt=yes,TrustServerCertificate=no',
-            'timeout': 30,
+            'driver': 'ODBC Driver 18 for SQL Server',  
+            'extra_params': 'Encrypt=yes;TrustServerCertificate=no;',
+            'timeout': 45 
         },
     }
 }
