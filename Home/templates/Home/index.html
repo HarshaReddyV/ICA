@@ -29,6 +29,15 @@
 </div>
 {% else %}
 
+<div class="container-fluid d-flex justify-content-center align-items-center ">
+  <button type="button"
+          class="btn btn-primary"
+          onclick="location.href='{% url 'addtopic' %}'">
+    Add topic
+  </button>
+</div>
+
+
 <div class="container">
   <h3 class="mb-4">Latest Threads</h3>
 

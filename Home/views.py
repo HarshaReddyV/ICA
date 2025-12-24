@@ -16,7 +16,7 @@ def addtopic(request):
         body = (request.POST.get("description") or "" ).strip()
 
         if title == "" and body == "":
-            return render(request, 'Home/addtopic.html', {'message': "Please enter title, description (Optionally)"})
+            return render(request, 'Home/addtopic.html', {'error': "Please enter title, description (Optional)"})
         else:
             topic = Topic.objects.create(
                 title = title,

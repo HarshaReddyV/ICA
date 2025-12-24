@@ -9,13 +9,14 @@
 
         <h4 class="mb-3">Create a topic</h4>
 
-        {% if messages %}
-          {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">
-              {{ message }}
+        {% if error %}
+  
+            <div class="text text-danger">
+            {{ error }}
             </div>
-          {% endfor %}
+        
         {% endif %}
+
 
         <form method="post" action="{% url 'addtopic' %}" novalidate>
           {% csrf_token %}
