@@ -1,6 +1,6 @@
 from dotenv import load_dotenv 
 from pathlib import Path
-
+import pyodbc
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -77,11 +77,28 @@ WSGI_APPLICATION = 'SocialHub.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+###
+### DATABASES = {
+###    'default': {
+###       'ENGINE': 'django.db.backends.sqlite3',
+###        'NAME': BASE_DIR / 'db.sqlite3',
+###    }
+### }
+
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'mssql',
+        'NAME': 'socialhub',
+        'User': 'Socialhub',
+        'Password': '1234@Hh1',
+        'HOST': 'tcp:socialhub.database.windows.net',
+        'PORT': '1433',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 18 for SQL Server',
+            'extra_params': 'Encrypt=yes,TrustServerCertificate=no',
+            'timeout': 30,
+        },
     }
 }
 

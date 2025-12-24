@@ -81,21 +81,45 @@ def postcomment(request, id):
     # 2) Profanity classification (OpenAI model call)
     try:
         prof_resp = client.responses.create(
-            model="gpt-4.1-mini",
-            input=[
-                {
-                    "role": "system",
-                    "content": (
-                        "You are a profanity detector for forum comments in any language and any emojis. "
-                        "Return ONLY valid JSON with exactly these keys: "
-                        "{\"has_profanity\": boolean, "
-                        "\"severity\": \"none\"|\"mild\"|\"strong\"}. "
-                        "Do not include any other text."
-                    ),
-                },
-                {"role": "user", "content": text},
-            ],
-        )
+        model="gpt-4.1-mini",
+        input=[
+            {
+                "role": "system",
+                "content": (
+                    "You are a STRICT profanity and abuse detector for forum comments. "
+                    "You MUST analyze BOTH text AND emojis. "
+                    "Treat emojis as language with meaning.\n\n"
+
+                    "Emoji rules:\n"
+                    "- Weapon emojis (🔪 🗡️ 🔫 💣) = STRONG profanity\n"
+                    "- Blood or violence emojis (🩸 💀 ☠️) = STRONG profanity\n"
+                    "- Middle finger or insulting gestures (🖕 👊) = STRONG profanity\n"
+                    "- Sexual or obscene emojis (🍆 🍑 💦 🥵) = STRONG profanity\n"
+                    "- Drug emojis (💉 💊 🚬) = MILD profanity\n"
+                    "- Vomit / sickness emojis (🤮 🤢) = MILD profanity\n"
+                    "- Angry / threatening faces combined with weapons = STRONG\n"
+                    "- Friendly or neutral emojis alone = NONE\n\n"
+
+                    "Severity rules:\n"
+                    "- none: no profanity or abusive meaning\n"
+                    "- mild: suggestive, aggressive, or inappropriate emojis/text\n"
+                    "- strong: violent, sexual, hateful, or threatening meaning\n\n"
+
+                    "Return ONLY valid JSON with exactly these keys:\n"
+                    "{"
+                    "\"has_profanity\": boolean, "
+                    "\"severity\": \"none\"|\"mild\"|\"strong\""
+                    "}\n"
+                    "Do NOT include explanations or extra text."
+                ),
+            },
+            {
+                "role": "user",
+                "content": text
+            },
+        ],
+    )
+
 
         raw = (prof_resp.output_text or "").strip()
         data = json.loads(raw)
