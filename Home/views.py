@@ -86,7 +86,7 @@ def postcomment(request, id):
                 {
                     "role": "system",
                     "content": (
-                        "You are a profanity detector for forum comments in any language. "
+                        "You are a profanity detector for forum comments in any language and any emojis. "
                         "Return ONLY valid JSON with exactly these keys: "
                         "{\"has_profanity\": boolean, "
                         "\"severity\": \"none\"|\"mild\"|\"strong\"}. "
