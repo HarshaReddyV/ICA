@@ -10,8 +10,23 @@ from django.contrib.auth.decorators import login_required
 import json
 import os
 
+def addtopic(request):
+    if request.method == 'POST':
+        title = (request.POST.get("title") or "").strip()
+        body = (request.POST.get("description") or "" ).strip()
 
-
+        if title == "" and body == "":
+            return render(request, 'Home/addtopic.html', {'message': "Please enter title, description (Optionally)"})
+        else:
+            topic = Topic.objects.create(
+                title = title,
+                body = body
+            )
+            topic.save()
+            return redirect('home')
+    else: 
+        return render(request, 'Home/addtopic.html')
+    
 
 def get_openai_client():
     api_key =  os.getenv("OPENAI_API_KEY")

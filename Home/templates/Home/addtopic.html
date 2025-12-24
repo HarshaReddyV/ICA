@@ -1,0 +1,48 @@
+{% extends "Home/base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-7">
+
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+
+        <h4 class="mb-3">Create a topic</h4>
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        <form method="post" action="{% url 'addtopic' %}" novalidate>
+          {% csrf_token %}
+
+          
+
+          <div class="input-group input-group-lg mb-3">
+            <input type="text" name="title" placeholder="Enter title" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+          </div>
+
+          <div class="input-group input-group-lg mb-3">
+            <input type="text" name="description" placeholder="Enter description" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+          </div>
+
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary" type="submit">
+              Publish
+            </button>
+            <a class="btn btn-outline-secondary" href="{% url 'home' %}">
+              Cancel
+            </a>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
