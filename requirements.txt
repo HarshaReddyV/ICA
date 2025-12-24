@@ -1,3 +1,4 @@
 Django == 5.2.8
 OpenAi == 2.8.1
 python-dotenv
+mssql-django pyodbc
