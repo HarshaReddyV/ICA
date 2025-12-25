@@ -137,23 +137,34 @@
     {% for comment in comments %}
       <div class="card mb-3">
         <div class="card-body">
+           <!-- Toxicity label -->
+            <div class="mb-2">
 
-          <!-- Toxicity label -->
-          <div class="mb-2">
-            {% if comment.top_label == "clean" %}
-              <span class="badge text-bg-success">clean</span>
-            {% else %}
-              <span class="badge text-bg-warning">{{ comment.top_label }}</span>
+              {# 1) Flagged content first #}
               {% if comment.is_flagged %}
                 <span class="badge text-bg-danger">flagged</span>
+
+                {# show the main moderation category if available #}
+                {% if comment.top_label and comment.top_label != "clean" %}
+                  <span class="badge text-bg-warning">{{ comment.top_label }}</span>
+                {% endif %}
               {% endif %}
-            {% endif %}
 
-            {% if comment.has_profanity %}
-                <span class="badge text-bg-dark">profanity</span>
-            {% endif %}
-          </div>
+              {# 2) Profanity label #}
+              {% if comment.has_profanity %}
+                <span class="badge text-bg-dark">
+                  profanity{% if comment.profanity_severity and comment.profanity_severity != "none" %}: {{ comment.profanity_severity }}{% endif %}
+                </span>
+              {% endif %}
 
+              {# 3) Only show clean if NOT flagged and NO profanity #}
+              {% if not comment.is_flagged and not comment.has_profanity %}
+                <span class="badge text-bg-success">clean</span>
+              {% endif %}
+
+            </div>
+
+          
           <p class="mb-1">{{ comment.text }}</p>
 
           <small class="text-muted">

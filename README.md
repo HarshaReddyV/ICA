@@ -5,6 +5,6 @@
 Masters project for Teesside University
 
 
-[Hosted on Azure App Service](https://socialhub-a5fdbjhpe3dwgecp.ukwest-01.azurewebsites.net)
+ Hosted on Azure app service which can be accessed [here](https://socialhub-a5fdbjhpe3dwgecp.ukwest-01.azurewebsites.net)
 
 ### Visitng this site may trigger safe browsing warnings based how your browser is configured
