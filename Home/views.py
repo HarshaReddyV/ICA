@@ -10,6 +10,69 @@ from django.contrib.auth.decorators import login_required
 import json
 import os
 
+
+
+
+
+def generate_topic_summary(topic, comments):
+    """
+    Returns a profanity-safe summary string, or "" if unavailable.
+    """
+
+    if not comments:
+        return ""
+
+    # Build input (include all comments)
+    lines = []
+    for c in comments[:200]:
+        sev = c.profanity_severity if c.has_profanity else "none"
+        lines.append(
+            f"- [profanity={str(c.has_profanity).lower()}, severity={sev}] {c.text}"
+        )
+
+    payload = "\n".join(lines)
+    payload = payload[:20000]
+
+    try:
+        client = get_openai_client()
+
+        resp = client.responses.create(
+            model="gpt-4.1-mini",
+            input=[
+                {
+                    "role": "system",
+                    "content": (
+                        "Summarise a forum topic and replies.\n"
+                        "Output MUST NOT contain profanity or abusive words.\n"
+                        "Do NOT quote comments.\n"
+                        "Paraphrase offensive language neutrally.\n\n"
+                        "Return ONLY valid JSON:\n"
+                        "{ \"summary\": string }\n\n"
+                        "Constraints:\n"
+                        "- Max 120 words\n"
+                        "- Neutral tone\n"
+                        "- No invented facts\n"
+                    )
+                },
+                {
+                    "role": "user",
+                    "content": (
+                        f"Topic title: {topic.title}\n"
+                        f"Topic body: {topic.body or ''}\n\n"
+                        f"Replies:\n{payload}"
+                    )
+                }
+            ]
+        )
+
+        raw = (resp.output_text or "").strip()
+        data = json.loads(raw)
+
+        return data.get("summary", "").strip()
+
+    except (OpenAIError, json.JSONDecodeError):
+        return ""
+
 def addtopic(request):
     if request.method == 'POST':
         title = (request.POST.get("title") or "").strip()
@@ -151,12 +214,22 @@ def postcomment(request, id):
 
 def topic(request, id):
     topic = get_object_or_404(Topic, id=id)
-    comments = Comment.objects.filter(topic=topic).order_by("-created_at")
+
+    comments = (
+        Comment.objects
+        .filter(topic=topic)
+        .order_by("-created_at")
+    )
+
+    # 🔹 Generate summary (safe, non-blocking)
+    summary_text = generate_topic_summary(topic, comments)
 
     return render(request, "Home/details.html", {
         "topic": topic,
-        "comments": comments
+        "comments": comments,
+        "topic_summary": summary_text,   # empty string if none
     })
+
 
 def index(request):
     topics = Topic.objects.order_by("-created_at")  # newest first

@@ -1,6 +1,36 @@
 {% extends "Home/base.html" %}
 {% block styleblock %}
+
+
 <style>
+  /* Summary floating card with gradient border */
+.summary-wrap{
+  position: relative;
+  border-radius: 18px;
+  padding: 2px;              /* gradient border thickness */
+  background: linear-gradient(90deg, #7c3aed, #06b6d4, #22c55e);
+  box-shadow: 0 14px 40px rgba(15, 23, 42, 0.12);
+  margin-bottom: 18px;
+}
+
+.summary-card{
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px 18px;
+  backdrop-filter: blur(6px);
+}
+
+.summary-title{
+  font-weight: 600;
+  letter-spacing: .2px;
+}
+
+.summary-text{
+  margin: 0;
+  color: #334155;
+  line-height: 1.55;
+}
+
   /* Sticky bottom bar */
   .comment-bar{
     position: fixed;
@@ -129,6 +159,19 @@
       </small>
     </div>
   </div>
+  
+   {% if topic_summary %}
+  <div class="summary-wrap">
+    <div class="summary-card">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <div class="summary-title text-muted">Topic summary</div>
+        <span class="badge text-bg-light">AI</span>
+      </div>
+
+      <p class="summary-text">{{ topic_summary }}</p>
+    </div>
+  </div>
+{% endif %}
 
   <!-- COMMENTS -->
   <h5 class="mb-3">Discussion</h5>
