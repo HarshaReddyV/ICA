@@ -1,11 +1,30 @@
-#  MSc Computer Science and Artificial Intelligence ICA
-## Student name: Harsha Reddy Vanga
-## Student ID: C2285085
+# MSc Computer Science and Artificial Intelligence – ICA
 
-# Social hub - Toxic/Profane comment detection and content summarisation using AI
+## Student Name: Harsha Reddy Vanga  
+## Student ID: C2285085  
 
- Hosted on Azure app service which can be accessed [here](https://socialhub-a5fdbjhpe3dwgecp.ukwest-01.azurewebsites.net/)
+---
 
- ![Screenshot of Web app](image.png)
+## SocialHub  
+### Toxic / Profane Comment Detection and AI-Based Content Summarisation
 
-### Visitng this site may trigger safe browsing warnings based how your browser is configured, consider switching off safe browsing in the browser settings if it appears 
+SocialHub is a web-based discussion platform that demonstrates the use of **Artificial Intelligence** for:
+- Toxic and profane comment detection  
+- Abuse and emoji-aware moderation  
+- Safe, profanity-free topic summarisation  
+
+The application is hosted on **Azure App Service** and can be accessed here:
+
+<a href="https://socialhub-a5fdbjhpe3dwgecp.ukwest-01.azurewebsites.net/"
+   target="_blank" rel="noopener noreferrer">
+  https://socialhub-a5fdbjhpe3dwgecp.ukwest-01.azurewebsites.net/
+</a>
+
+![Screenshot of the web application](image.png)
+
+---
+
+### ⚠️ Safe Browsing Notice
+Depending on your browser’s security configuration, visiting this site **may trigger safe-browsing warnings**.  
+If this occurs, please review or temporarily adjust your browser’s safe-browsing settings to proceed.
+
